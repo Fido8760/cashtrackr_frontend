@@ -23,7 +23,7 @@ export default function ConfirmAccountForm() {
         if(isComplete){
             dispatch()
         }
-    }, [isComplete])
+    }, [isComplete, dispatch])
 
     useEffect(() => {
         if(state.errors) {
@@ -39,7 +39,7 @@ export default function ConfirmAccountForm() {
                 }
             })
         }
-    }, [state])
+    }, [state, router])
 
     const handleChange = (token: string) => {
         setIscomplete(false)

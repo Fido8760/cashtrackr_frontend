@@ -29,7 +29,7 @@ export default function RegisterForm() {
             action={dispatch}
             noValidate
         >
-            {state.errors.map(error => <ErrorMessage >{error}</ErrorMessage>)}
+            {state.errors.map(error => <ErrorMessage key={error}>{error}</ErrorMessage>)}
             {state.success && <SuccessMEssage>{state.success}</SuccessMEssage>}
 
             <div className="flex flex-col gap-2">

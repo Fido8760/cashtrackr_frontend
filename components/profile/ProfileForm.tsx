@@ -26,7 +26,7 @@ export default function ProfileForm({user}: {user: User}) {
                 noValidate
                 action={dispatch}
             >
-                {state.errors.map(error => <ErrorMessage>{error}</ErrorMessage>)}
+                {state.errors.map(error => <ErrorMessage key={error}>{error}</ErrorMessage>)}
                 <div className="flex flex-col gap-5">
                     <label
                         className="font-bold text-2xl"
