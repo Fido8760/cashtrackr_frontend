@@ -76,6 +76,23 @@ export const DraftExpenseSchema = z.object({
     amount: z.coerce.number().min(1, {message: 'Cantidad no válida'})
 })
 
+export const UpdatePasswordSchema = z.object({
+    current_password: z.string().min(1, {message: 'El password no puede ir vacio'}),
+    password: z.string().min(8, {message: 'El nuevo password debe ser el almenos 8 caracteres'}),
+    password_confirmation: z.string()
+}).refine((data) => data.password === data.password_confirmation, {
+    message: "Los Passwords no son iguales",
+    path: ["password_confirmation"]
+})
+
+export const ProfileFormSchema = z.object({
+    name: z.string()
+            .min(1, {message: 'Tu Nombre no puede ir vacio'}),
+    email: z.string()
+            .min(1, {message: 'El Email es Obligatorio'})
+            .email({message: 'Email no válido'}),
+})
+
 export const BudgetAPIResponseSchema = z.object({
     id: z.number(),
     name: z.string(),
@@ -91,3 +108,4 @@ export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema.omit({ex
 export type User = z.infer<typeof UserSchema>
 export type Budget = z.infer<typeof BudgetAPIResponseSchema>
 export type Expense = z.infer<typeof ExpenseAPIResponseSchema>
+export type DraftExpense = z.infer<typeof DraftExpenseSchema>

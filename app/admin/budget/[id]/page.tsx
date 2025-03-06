@@ -1,5 +1,7 @@
+import ProgressBar from "@/components/budgets/ProgressBar"
 import AddExpenseButton from "@/components/expenses/AddExpenseButton"
 import ExpenseMenu from "@/components/expenses/ExpenseMenu"
+import Amount from "@/components/ui/Amount"
 import ModalContainer from "@/components/ui/ModalContainer"
 import { getBudget } from "@/src/services/budget"
 import { formatCurrency, formatDate } from "@/src/utils"
@@ -15,8 +17,10 @@ export async function generateMetadata({params} : {params: {id: string}}) : Prom
 
 export default async function BudgetDetailsPage({params}: {params: {id: string}}) {
     const budget =  await getBudget(params.id)
+    const totalSpent = budget.expenses.reduce((total, expense) => +expense.amount + total, 0)
+    const totalAvailable = +budget.amount - totalSpent
 
-    console.log(budget)
+    const percentage = +((totalSpent / +budget.amount) * 100).toFixed(2)
 
     return (
         <>
@@ -30,6 +34,27 @@ export default async function BudgetDetailsPage({params}: {params: {id: string}}
 
             {budget.expenses.length ? (
                 <>
+                    <div className=" grid grid-cols-1 md:grid-cols-2 mt-10">
+                        <ProgressBar 
+                            percentage={percentage}
+                        />
+                        <div className=" flex flex-col justify-center items-center md:items-start gap-5">
+                            <Amount 
+                                label="Presupuesto"
+                                amount={+budget.amount}
+                            />
+                            <Amount 
+                                label="Dsiponible"
+                                amount={totalAvailable}
+                            />
+                            <Amount 
+                                label="Gastado"
+                                amount={totalSpent}
+                            />
+                            
+                        </div>
+                    </div>
+
                     <h1 className=" font-black text-4xl text-purple-950 mt-10">Gastos en este presupuesto</h1>
                     <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">
                     {budget.expenses.map((expense) => (
